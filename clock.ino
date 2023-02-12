@@ -14,9 +14,10 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 // variables
 
 // bool d_one[] = {0,0,0,0,0,0,0};
-//              0 1 2 3 4 5 6
-bool d_one[] = {0,0,1,0,0,0,1};
-bool d_two[] = {0,1,1,0,1,1,0};
+//                0 1 2 3 4 5 6
+bool d_one[]   = {0,0,1,0,0,0,1};
+bool d_two[]   = {0,1,1,0,1,1,0};
+bool d_three[] = {0,1,1,1,0,1,1};
 
 uint8_t red[]     = {255,0,0};
 uint8_t magenta[] = {250, 0, 30};
@@ -58,6 +59,8 @@ void setup() {
 void loop() {
   const int dly = 10000;
   
+  dig(d_three, red);
+  delay(dly);
 
   dig(d_one, red);
   delay(dly);
