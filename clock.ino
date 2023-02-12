@@ -8,13 +8,15 @@
 //////////////////////// Encoder
 #include <BasicEncoder.h>
 
-
+#define ROTBUTTON     8
 
 BasicEncoder encoder(9,10);
 
-
-
 #define LEDPIN        6
+
+
+
+// NOT A PIN:::
 #define NUMPIXELS     7
 #define DIGLEN        7
 
@@ -61,6 +63,8 @@ void setup() {
   pixels.begin();
 
   Serial.begin(115200);
+
+  pinMode(ROTBUTTON, INPUT);
 }
 
 
@@ -68,9 +72,7 @@ int state = 0;
 
 void loop() {
   const int dly = 10000;
-  
   // dig(d_all[2], red);
-
   // dig(d_three, red);
   // delay(dly);
 
@@ -82,30 +84,26 @@ void loop() {
   }
 
   state = state + encoder_change;
-
-
-
-
   Serial.println(state);
-
-
-// 1 / 3
-// 4 / 3
-// 7 / 3
-
   state = (state+d_total) % d_total;
 
-  dig(d_all[state], red);
-  // delay(1);
+  bool pressed;
+  if(digitalRead(ROTBUTTON)) {
+    pressed = false;
+  } else {
+    pressed = true;
+  }
+
+  if(pressed) {
+    Serial.println("press");
+  }
+  if(pressed) {
+    dig(d_all[state], magenta);
+
+  } else {
+    dig(d_all[state], red);
+  }
   
-
-  
-
-  // delay(300);
-
-
-  
-    // delay(300);
 }
 
 
