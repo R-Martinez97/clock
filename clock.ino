@@ -26,12 +26,14 @@ Adafruit_NeoPixel pixels(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
 // bool d_one[] = {0,0,0,0,0,0,0};
 //                0 1 2 3 4 5 6
+bool d_zero[]  = {1,1,0,1,1,1,1};
 bool d_one[]   = {0,0,1,0,0,0,1};
 bool d_two[]   = {0,1,1,0,1,1,0};
 bool d_three[] = {0,1,1,1,0,1,1};
+bool d_four[]  = {1,0,1,1,0,0,1};
 
-bool *d_all[] = {d_one, d_two, d_three};
-const int d_total = 3;
+bool *d_all[] = {d_zero, d_one, d_two, d_three, d_four};
+const int d_total = 5;
 
 uint8_t red[]     = {255,0,0};
 uint8_t magenta[] = {250, 0, 30};
@@ -67,22 +69,34 @@ int state = 0;
 void loop() {
   const int dly = 10000;
   
+  // dig(d_all[2], red);
+
   // dig(d_three, red);
   // delay(dly);
 
   encoder.service();
 
   int encoder_change = encoder.get_change();
-  if (encoder_change) {
+  if (encoder_change != 0) {
     Serial.println(encoder_change);
   }
 
-  state += encoder_change;
+  state = state + encoder_change;
 
-  state = state % d_total;
+
+
+
+  Serial.println(state);
+
+
+// 1 / 3
+// 4 / 3
+// 7 / 3
+
+  state = (state+d_total) % d_total;
 
   dig(d_all[state], red);
-  delay(1);
+  // delay(1);
   
 
   
