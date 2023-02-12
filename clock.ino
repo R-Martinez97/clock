@@ -1,13 +1,24 @@
+//////////////////////// NEO PIXEL INCLUDE
+
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
   #include <avr/power.h>
 #endif
 
-#define PIN        6
-#define NUMPIXELS  7
-#define DIGLEN     7
+//////////////////////// Encoder
+#include <BasicEncoder.h>
 
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+
+BasicEncoder encoder(9,10);
+
+
+
+#define LEDPIN        6
+#define NUMPIXELS     7
+#define DIGLEN        7
+
+Adafruit_NeoPixel pixels(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
 
 
@@ -18,6 +29,9 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 bool d_one[]   = {0,0,1,0,0,0,1};
 bool d_two[]   = {0,1,1,0,1,1,0};
 bool d_three[] = {0,1,1,1,0,1,1};
+
+bool *d_all[] = {d_one, d_two, d_three};
+const int d_total = 3;
 
 uint8_t red[]     = {255,0,0};
 uint8_t magenta[] = {250, 0, 30};
@@ -35,17 +49,6 @@ void dig(const bool d[], const uint8_t c[] ) {
   pixels.show();
 }
 
-    // pixels.setPixelColor(i,pixels.Color(250, 0, 30));
-
-    // if(i<8) {
-    //    pixels.setPixelColor(i,pixels.Color(250, 0, 30));
-    // } else {
-    //    pixels.setPixelColor(i,pixels.Color(250, 80, 130));
-    // }
-
-
-
-
 
 
 void setup() {
@@ -54,26 +57,50 @@ void setup() {
 #endif
 
   pixels.begin();
+
+  Serial.begin(115200);
 }
+
+
+int state = 0;
 
 void loop() {
   const int dly = 10000;
   
-  dig(d_three, red);
-  delay(dly);
+  // dig(d_three, red);
+  // delay(dly);
 
-  dig(d_one, red);
-  delay(dly);
+  encoder.service();
 
-  dig(d_two, red);
-  delay(dly);
+  int encoder_change = encoder.get_change();
+  if (encoder_change) {
+    Serial.println(encoder_change);
+  }
 
-  dig(d_one, magenta);
-  delay(dly);
+  state += encoder_change;
 
-  dig(d_two, magenta);
-  delay(dly);
+  state = state % d_total;
+
+  dig(d_all[state], red);
+  delay(1);
+  
+
+  
+
+  // delay(300);
+
 
   
     // delay(300);
 }
+
+
+
+
+
+
+
+
+
+
+
