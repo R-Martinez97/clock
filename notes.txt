@@ -1,0 +1,1 @@
+leds are 16mm apart, that's 11.313708499 mm on the right triangle
